@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BsChevronRight } from "react-icons/bs";
 import { BiMap } from "react-icons/bi";
 import { ImCalendar } from "react-icons/im";
@@ -15,26 +15,25 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { EventContext } from "../context/EventContext";
 type Props = {};
 
 const EventPage = (props: Props) => {
+  const { myEvent } = useContext(EventContext);
   const matches = useMediaQuery("(max-width:600px)");
   const theme = useTheme();
   return (
     <Box
       sx={{
-        [theme.breakpoints.up("sm")]: {
-          padding: 4,
-        },
+        padding: 4,
         [theme.breakpoints.up("md")]: {
-          padding: 8,
           display: "flex",
           flexDirection: "row-reverse",
         },
       }}
     >
       <Box flex={1}>
-        <Image fullWidth src={imageSrc} alt="Thumbnail" />
+        <Image fullWidth src={myEvent?.imageURI!} alt="Thumbnail" />
       </Box>
       <Box
         sx={{
@@ -50,13 +49,13 @@ const EventPage = (props: Props) => {
           }}
           py={1}
         >
-          <Typography component="h3" variant="h3">
-            Birthday Bash
+          <Typography component="h3" variant="h3" color="primary">
+            {myEvent?.eventName || "Event Name Did Not Set"}
           </Typography>
-          <Typography variant="subtitle1">
+          <Typography variant="h6">
             Hosted by{" "}
-            <Typography component="span" variant="h6">
-              Elysia
+            <Typography component="span" variant="subtitle1">
+              {myEvent?.hostName || "No Host Name"}
             </Typography>
           </Typography>
         </Box>
@@ -75,7 +74,7 @@ const EventPage = (props: Props) => {
               <ListItemAvatar sx={{ pr: 2 }}>
                 <Avatar
                   sx={{
-                    boxShadow: (theme) => theme.shadows[3],
+                    boxShadow: (theme) => theme.shadows[1],
                     width: 56,
                     height: 56,
                     backgroundColor: "#FFFFFF",
@@ -87,14 +86,38 @@ const EventPage = (props: Props) => {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={<Typography variant="h5">18 August 6:00PM</Typography>}
+                primary={
+                  <Typography
+                    sx={{
+                      [theme.breakpoints.down("md")]: {
+                        fontSize: "0.875rem",
+                      },
+                    }}
+                    variant="h5"
+                  >
+                    {myEvent?.startTime || "Any Time"}
+                  </Typography>
+                }
                 secondary={
-                  <Typography>
+                  <Typography
+                    sx={{
+                      [theme.breakpoints.down("md")]: {
+                        fontSize: "0.875rem",
+                      },
+                    }}
+                  >
                     to{" "}
-                    <Typography component="span" variant="h5">
-                      19 August 1:00PM
+                    <Typography
+                      sx={{
+                        [theme.breakpoints.down("md")]: {
+                          fontSize: "0.875rem",
+                        },
+                      }}
+                      component="span"
+                      variant="h5"
+                    >
+                      {myEvent?.endTime || "No End Time"}
                     </Typography>{" "}
-                    UTC +10
                   </Typography>
                 }
               />
@@ -114,7 +137,7 @@ const EventPage = (props: Props) => {
               <ListItemAvatar sx={{ pr: 2 }}>
                 <Avatar
                   sx={{
-                    boxShadow: theme.shadows[3],
+                    boxShadow: (theme) => theme.shadows[1],
                     width: 56,
                     height: 56,
                     backgroundColor: "#FFFFFF",
@@ -126,14 +149,37 @@ const EventPage = (props: Props) => {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={<Typography variant="h5">18 August 6:00PM</Typography>}
+                primary={
+                  <Typography
+                    sx={{
+                      [theme.breakpoints.down("md")]: {
+                        fontSize: "0.875rem",
+                      },
+                    }}
+                    variant="h5"
+                  >
+                    Street Name
+                  </Typography>
+                }
                 secondary={
-                  <Typography>
-                    to{" "}
-                    <Typography component="span" variant="h5">
-                      19 August 1:00PM
-                    </Typography>{" "}
-                    UTC +10
+                  <Typography
+                    sx={{
+                      [theme.breakpoints.down("md")]: {
+                        fontSize: "0.875rem",
+                      },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        [theme.breakpoints.down("md")]: {
+                          fontSize: "0.875rem",
+                        },
+                      }}
+                      component="span"
+                      variant="h5"
+                    >
+                      {myEvent?.location}
+                    </Typography>
                   </Typography>
                 }
               />
